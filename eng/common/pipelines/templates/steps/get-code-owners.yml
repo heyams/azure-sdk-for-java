@@ -1,24 +1,19 @@
 parameters: 
-  TargetUserVariable: 'notspecified'
+  TargetUserVariable: ''
   TargetTeamVariable: 'notspecified'
   TargetLabelVariable: 'notspecified'
   ServiceDirectory: ''
   DevOpsFeed: "https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-net/nuget/v3/index.json"
-
+variables:
+    - template: ../variables/tool-version.yml
 steps:
-  - task: DotNetCoreCLI@2
-    displayName: 'Install CodeOwners Retriever'
-    inputs:
-      command: custom
-      custom: 'tool'
-      arguments: 'install --tool-path . --add-source "${{ parameters.DevOpsFeed }}" --version "1.0.0-dev.20211019.1" "Azure.Sdk.Tools.RetrieveCodeOwners"'
-      workingDirectory: '$(Agent.BuildDirectory)'
+  - pwsh: |
+      dotnet tool install --tool-path . --add-source "${{ parameters.DevOpsFeed }}" --version '$("Azure.Sdk.Tools.RetrieveCodeOwners")' "Azure.Sdk.Tools.RetrieveCodeOwners"
+    displayName: 'Install tool RetrieveCodeOwners'
+    workingDirectory: '$(Agent.ToolsDirectory)'
 
   - pwsh: |
-      Write-Host "/sdk/${{ parameters.ServiceDirectory }}/"
-      Write-Host "$(Build.SourcesDirectory)"
-      dir $(Build.SourcesDirectory)
-      Push-Location '$(Agent.BuildDirectory)'
+      Push-Location '$(Agent.ToolsDirectory)'
       .\retrieve-codeowners `
         --target-directory "/sdk/${{ parameters.ServiceDirectory }}/" `
         --root-directory "$(Build.SourcesDirectory)" `

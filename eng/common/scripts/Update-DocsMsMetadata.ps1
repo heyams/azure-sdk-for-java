@@ -90,9 +90,11 @@ function GetAdjustedReadmeContent($ReadmeContent, $PackageInfo, $PackageMetadata
     $author = $CodeOwners.Split(",")[0]
     $msauthor = $author 
   }
-  elseif (Test-Path '$PSScriptRoot/default-code-owner.txt') {
-    $author = Get-Content '$PSScriptRoot/default-code-owner.txt' -Raw
-    $msauthor = $author 
+  elseif (Test-Path '$PSScriptRoot/default-code-owner.json') {
+    # Json file is in a format of '{ "author":"value1", "msauthor":"value2" }' 
+    $authorFromJson = Get-Content '$PSScriptRoot/default-code-owner.json' | ConvertFrom-Json
+    $author = $authorFromJson.author
+    $msauthor = $authorFromJson.msauthor 
   }
   Write-Host "The author is: $author"
   Write-Host "The ms alias is: $msauthor"
@@ -101,7 +103,7 @@ function GetAdjustedReadmeContent($ReadmeContent, $PackageInfo, $PackageMetadata
 title: $foundTitle
 keywords: Azure, $Language, SDK, API, $($PackageInfo.Name), $service
 author: $author
-ms.author: $author
+ms.author: $msauthor
 ms.date: $date
 ms.topic: reference
 ms.prod: azure
