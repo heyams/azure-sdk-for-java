@@ -22,6 +22,9 @@ parameters:
   - name: DailyDocsBuild
     type: boolean
     default: false
+  - name: CodeOwners
+    type: string
+    default: ""
   - name: SparseCheckoutPaths
     type: object
     default:
@@ -81,7 +84,8 @@ steps:
       -PackageInfoJsonLocations $packageInfoLocations `
       -DocRepoLocation "$(DocRepoLocation)" `
       -Language '${{parameters.Language}}' `
-      -RepoId '${{ parameters.RepoId }}'
+      -RepoId '${{ parameters.RepoId }}' `
+      -CodeOwners '${{ parameters.CodeOwners }}'
   displayName: Apply Documentation Updates
 
 - template: /eng/common/pipelines/templates/steps/git-push-changes.yml
