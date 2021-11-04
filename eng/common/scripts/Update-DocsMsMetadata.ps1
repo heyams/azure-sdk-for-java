@@ -46,7 +46,10 @@ param(
   [string]$RepoId,
 
   [Parameter(Mandatory = $false)]
-  [string]$CodeOwners = ""
+  [string]$CodeOwners = "",
+
+  [Parameter(Mandatory = $false)]
+  [string]$DefaultCodeOwnerFile = "$PSScriptRoot/default-code-owner.txt"
 )
 
 . (Join-Path $PSScriptRoot common.ps1)
@@ -90,9 +93,9 @@ function GetAdjustedReadmeContent($ReadmeContent, $PackageInfo, $PackageMetadata
     $author = $CodeOwners.Split(",")[0]
     $msauthor = $author 
   }
-  elseif (Test-Path '$PSScriptRoot/default-code-owner.json') {
+  elseif (Test-Path $DefaultCodeOwnerFile) {
     # Json file is in a format of '{ "author":"value1", "msauthor":"value2" }' 
-    $authorFromJson = Get-Content '$PSScriptRoot/default-code-owner.json' | ConvertFrom-Json
+    $authorFromJson = Get-Content $DefaultCodeOwnerFile | ConvertFrom-Json
     $author = $authorFromJson.author
     $msauthor = $authorFromJson.msauthor 
   }
