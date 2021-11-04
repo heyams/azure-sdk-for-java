@@ -30,6 +30,9 @@ GitHub repository ID of the SDK. Typically of the form: 'Azure/azure-sdk-for-js'
 
 .PARAMETER CodeOwners
 GitHub identities of the code owners. 
+
+.PARAMETER DefaultCodeOwnerFile
+The file path of default-code-owner.json.
 #>
 
 param(
