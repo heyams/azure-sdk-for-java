@@ -25,9 +25,6 @@ parameters:
   - name: CodeOwners
     type: string
     default: ""
-  - name: DefaultCodeOwnerFile
-    type: string
-    default: "eng/default-code-owner.json"
   - name: SparseCheckoutPaths
     type: object
     default:
